@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.gradle.userdev' version '7.0.142'
+}
+
+version = '1.0.1'
+group = 'com.layerfill'
+
+base {
+    archivesName = 'layerfill'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+    }
+    client {
+        client()
+    }
+    server {
+        server()
+        programArgument '--nogui'
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:21.1.64"
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+        minecraft_version      : '1.21.1',
+        minecraft_version_range: '[1.21.1,1.22)',
+        neo_version            : '21.1.64',
+        neo_version_range      : '[21.1.64,)',
+        loader_version_range   : '[2,)',
+        mod_id                 : 'layerfill',
+        mod_name               : 'Layer Fill',
+        mod_version            : project.version,
+        mod_authors            : 'layerfill',
+        mod_description        : 'Water fills containers layer by layer from the bottom up.'
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
