@@ -18,8 +18,8 @@ jobs:
           distribution: 'temurin'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      - name: Install Gradle wrapper
+        run: gradle wrapper --gradle-version 8.8
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload jar
